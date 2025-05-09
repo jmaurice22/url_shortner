@@ -1,6 +1,7 @@
 from flask import Flask, request, redirect, jsonify
 import random
 import string
+from threading import Thread
 
 app = Flask(__name__)
 
@@ -32,5 +33,14 @@ def redirect_to_url(short_url):
 
     return redirect(original_url)
 
+def run_flask():
+    app.run(debug=True, use_reloader=False)
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    flask_thread = Thread(target=run_flask)
+    flask_thread.daemon = True
+    flask_thread.start()
+
+    # Import and run the Tkinter GUI
+    from gui import root
+    root.mainloop()
